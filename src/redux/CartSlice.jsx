@@ -40,11 +40,30 @@ const cartSlice = createSlice({
         delete state.items[action.payload];
       }
     },
+    // Sets an explicit quantity for a plant. A quantity of zero or below
+    // removes the plant from the cart.
+    updateQuantity: (state, action) => {
+      const { id, quantity } = action.payload;
+      const item = state.items[id];
+      if (!item) {
+        return;
+      }
+      if (quantity > 0) {
+        item.quantity = quantity;
+      } else {
+        delete state.items[id];
+      }
+    },
   },
 });
 
-export const { addItem, removeItem, increaseQuantity, decreaseQuantity } =
-  cartSlice.actions;
+export const {
+  addItem,
+  removeItem,
+  increaseQuantity,
+  decreaseQuantity,
+  updateQuantity,
+} = cartSlice.actions;
 
 export const selectCartItems = (state) => Object.values(state.cart.items);
 
